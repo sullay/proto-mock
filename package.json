@@ -1,0 +1,34 @@
+{
+  "name": "proto-mock",
+  "version": "0.0.1",
+  "description": "根据proto文件定义，mock对应的json数据",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "prepublishOnly": "npm run build&&npm run clean",
+    "clean": "tsc --build --clean"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sullay/proto-mock.git"
+  },
+  "author": "sullay",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sullay/proto-mock/issues"
+  },
+  "homepage": "https://github.com/sullay/proto-mock#readme",
+  "devDependencies": {
+    "@types/node": "^18.15.11",
+    "ts-node": "^10.9.1"
+  },
+  "dependencies": {
+    "mockjs": "^1.1.0",
+    "protobufjs": "^7.2.3",
+    "protobufjs-cli": "^1.1.1"
+  },
+  "files": [
+    "/**/*.js",
+    "/**/*.d.ts"
+  ]
+}
