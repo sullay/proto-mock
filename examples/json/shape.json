@@ -1,0 +1,29 @@
+{
+  "name": "neural program Rufiyaa Soft Southwest",
+  "lines": [
+    {
+      "start": {
+        "x": 44972.8,
+        "y": 34366.14,
+        "color": 1
+      },
+      "end": {
+        "x": 7345.2,
+        "y": 38774.31,
+        "color": 1
+      }
+    },
+    {
+      "start": {
+        "x": 42107.5,
+        "y": 78586.95,
+        "color": 1
+      },
+      "end": {
+        "x": 34582.55,
+        "y": 96672.32,
+        "color": 2
+      }
+    }
+  ]
+}

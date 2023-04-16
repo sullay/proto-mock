@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "prepublishOnly": "npm run build&&npm run clean",
+    "prepublishOnly": "npm run build && npm run clean",
     "clean": "tsc --build --clean"
   },
   "repository": {
@@ -23,6 +23,7 @@
     "ts-node": "^10.9.1"
   },
   "dependencies": {
+    "@faker-js/faker": "^7.6.0",
     "mockjs": "^1.1.0",
     "protobufjs": "^7.2.3",
     "protobufjs-cli": "^1.1.1"

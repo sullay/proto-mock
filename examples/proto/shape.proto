@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+enum Color {
+  RED = 0;
+  GREEN = 1;
+  BLUE = 2;
+}
+
+message Point {
+  double x = 1;
+  double y = 2;
+  Color color = 3;
+}
+
+message Line {
+  Point start = 1;
+  Point end = 2;
+}
+
+message Shape {
+  string name = 1;
+  repeated Line lines = 2;
+}
