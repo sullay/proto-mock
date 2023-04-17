@@ -4,6 +4,7 @@ import * as fs from 'fs'
 
 const file = path.resolve(__dirname, './proto/vector_tile.proto')
 
-const jsonData = generateMockData(file, 'Tile', { maxRepeatedLength: 10 })
+generateMockData(file, 'Tile', { maxRepeatedLength: 10 }).then(jsonData => {
+  fs.writeFileSync(path.resolve(__dirname, './json/vector_tile.json'), JSON.stringify(jsonData))
+})
 
-fs.writeFileSync(path.resolve(__dirname, './json/vector_tile.json'), JSON.stringify(jsonData))

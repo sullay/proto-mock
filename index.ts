@@ -1,38 +1,6 @@
 import * as protobuf from 'protobufjs';
 import { faker } from '@faker-js/faker'
-
-/**
- * Generates random data for a given protobuf field.
- * @param field - The protobuf field.
- * @returns The generated random data.
- */
-function generateRandomData(field: protobuf.Field): any {
-  switch (field.type) {
-    case 'double':
-    case 'float':
-      return faker.datatype.float();
-    case 'int32':
-    case 'uint32':
-    case 'sint32':
-    case 'fixed32':
-    case 'sfixed32':
-      return faker.datatype.number();
-    case 'int64':
-    case 'uint64':
-    case 'sint64':
-    case 'fixed64':
-    case 'sfixed64':
-      return faker.datatype.bigInt().toString();
-    case 'bool':
-      return faker.datatype.boolean();
-    case 'string':
-      return faker.random.words(5);
-    case 'bytes':
-      return Buffer.from(faker.random.word());
-    default:
-      return null;
-  }
-}
+import { convertToUnderscore, generateRandomData } from './util'
 
 /**
  * Generates mock data for a given protobuf message type.
@@ -41,15 +9,15 @@ function generateRandomData(field: protobuf.Field): any {
  * @param options - Optional settings for the mock data generation.
  * @returns The generated mock data.
  */
-export function generateMockData(
+export async function generateMockData(
   protoFilePath: string,
   messageType: string,
   options: {
     maxRepeatedLength?: number;
     keepCase?: boolean;
   } = {}
-): any {
-  const root = protobuf.loadSync(protoFilePath);
+): Promise<any> {
+  const root = await protobuf.load(protoFilePath);
   root.resolveAll();
   const type = root.lookupType(messageType);
   if (!type) {
@@ -59,15 +27,6 @@ export function generateMockData(
   const { maxRepeatedLength = 3, keepCase = false } = options;
 
   return generateMockDataRecursive(type);
-
-  /**
-   * Converts a string to snake_case.
-   * @param str - The string to convert.
-   * @returns The converted string.
-   */
-  function convertToUnderscore(str: string): string {
-    return str.replace(/([a-z])([A-Z])/g, '$1_$2').toLowerCase();
-  }
 
   /**
    * Generates mock data for a repeated protobuf field.
@@ -98,14 +57,14 @@ export function generateMockData(
   function generateMockMapData(field: protobuf.MapField): any {
     const keyType = field.keyType;
     const valueType = field.type;
-  
+
     if (!keyType || !valueType) {
       return null;
     }
-  
+
     const key = generateRandomData({ type: keyType } as protobuf.Field);
     let value;
-  
+
     if (field.resolvedType instanceof protobuf.Type) {
       value = generateMockDataRecursive(field.resolvedType as protobuf.Type);
     } else if (field.resolvedType instanceof protobuf.Enum) {
@@ -114,7 +73,7 @@ export function generateMockData(
     } else {
       value = generateRandomData({ type: valueType } as protobuf.Field);
     }
-  
+
     const map = { [key]: value };
     return map;
   }
