@@ -1,12 +1,13 @@
 {
   "name": "proto-mock",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "根据proto文件定义，mock对应的json数据",
   "main": "index.js",
   "scripts": {
     "build": "tsc -p tsconfig.json",
+    "clean": "tsc --build --clean",
     "prepublishOnly": "npm run build",
-    "clean": "tsc --build --clean"
+    "postpublish": "npm run clean"
   },
   "repository": {
     "type": "git",
