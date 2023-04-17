@@ -42,5 +42,6 @@ message Tile {
     map<string, int32> int_map = 6;
     map<string, Value> value_map = 7;
     map<string, GeomType> value_menu = 8;
+    
     extensions 16 to 8191;
 }

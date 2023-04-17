@@ -58,6 +58,8 @@ export function generateMockData(
 
   const { maxRepeatedLength = 3, keepCase = false } = options;
 
+  return generateMockDataRecursive(type);
+
   /**
    * Converts a string to snake_case.
    * @param str - The string to convert.
@@ -89,55 +91,68 @@ export function generateMockData(
   }
 
   /**
-   * Generates mock data for a given protobuf message type.
-   * @param type - The protobuf message type.
+   * Generates mock data for a map protobuf field.
+   * @param field - The protobuf MapField.
    * @returns The generated mock data.
    */
-   function generateMockDataRecursive(type: protobuf.Type): any {
-    const mockData: any = {};
+  function generateMockMapData(field: protobuf.MapField): any {
+    const keyType = field.keyType;
+    const valueType = field.type;
   
+    if (!keyType || !valueType) {
+      return null;
+    }
+  
+    const key = generateRandomData({ type: keyType } as protobuf.Field);
+    let value;
+  
+    if (field.resolvedType instanceof protobuf.Type) {
+      value = generateMockDataRecursive(field.resolvedType as protobuf.Type);
+    } else if (field.resolvedType instanceof protobuf.Enum) {
+      const values = Object.values(field.resolvedType.values);
+      value = values[faker.datatype.number({ min: 0, max: values.length - 1 })];
+    } else {
+      value = generateRandomData({ type: valueType } as protobuf.Field);
+    }
+  
+    const map = { [key]: value };
+    return map;
+  }
+
+  /**
+ * Generates mock data for a given protobuf message type.
+ * @param type - The protobuf message type.
+ * @returns The generated mock data.
+ */
+  function generateMockDataRecursive(type: protobuf.Type): any {
+    const mockData: any = {};
+
     // Loop through each field in the protobuf message
     for (const field of type.fieldsArray) {
       // If the field is a map, generate a random key and value for it
       if (field.map && field instanceof protobuf.MapField) {
-        const keyType = field.keyType;
-        const valueType = field.type;
-        if (keyType && valueType) {
-          const key = generateRandomData({ type: keyType } as protobuf.Field);
-          let value;
-          if (field.resolvedType instanceof protobuf.Type) {
-            value = generateMockDataRecursive(field.resolvedType as protobuf.Type)
-          } else if (field.resolvedType instanceof protobuf.Enum) {
-            const values = Object.values(field.resolvedType.values);
-            value = values[faker.datatype.number({ min: 0, max: values.length - 1 })];
-          } else {
-            value = generateRandomData({ type: valueType } as protobuf.Field)
-          }
-          const map = { [key]: value };
-          mockData[keepCase ? convertToUnderscore(field.name) : field.name] = map;
-        }
-      } 
+        mockData[keepCase ? convertToUnderscore(field.name) : field.name] = generateMockMapData(field);
+      }
       // If the field is repeated, generate an array of random values for it
       else if (field.repeated) {
         mockData[keepCase ? convertToUnderscore(field.name) : field.name] = generateRepeatedMockData(field);
-      } 
+      }
       // If the field is a nested message, recursively generate mock data for it
       else if (field.resolvedType instanceof protobuf.Type) {
         const nestedMockData = generateMockDataRecursive(field.resolvedType as protobuf.Type);
         mockData[keepCase ? convertToUnderscore(field.name) : field.name] = nestedMockData;
-      } 
+      }
       // If the field is an enum, generate a random value from its options
       else if (field.resolvedType instanceof protobuf.Enum) {
         const values = Object.values(field.resolvedType.values);
         mockData[keepCase ? convertToUnderscore(field.name) : field.name] = values[faker.datatype.number({ min: 0, max: values.length - 1 })];
-      } 
-      // Otherwise, generate a random value based on the field's type
+      }
+      // If the field is a non-repeated non-nested field, generate a random value for it
       else {
         mockData[keepCase ? convertToUnderscore(field.name) : field.name] = generateRandomData(field);
       }
     }
-  
+
     return mockData;
   }
-  return generateMockDataRecursive(type);
 }
