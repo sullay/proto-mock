@@ -1,6 +1,6 @@
 import * as protobuf from 'protobufjs';
 import { faker } from '@faker-js/faker'
-import { convertToUnderscore, generateRandomData } from './util'
+import { convertToUnderscore, generateRandomData } from './utils'
 
 /**
  * Generates mock data for a given protobuf message type.
