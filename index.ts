@@ -50,10 +50,10 @@ export async function generateMockData(
   }
 
   /**
-   * Generates mock data for a map protobuf field.
-   * @param field - The protobuf MapField.
-   * @returns The generated mock data.
-   */
+ * Generates mock data for a map protobuf field.
+ * @param field - The protobuf MapField.
+ * @returns The generated mock data.
+ */
   function generateMockMapData(field: protobuf.MapField): any {
     const keyType = field.keyType;
     const valueType = field.type;
@@ -62,21 +62,27 @@ export async function generateMockData(
       return null;
     }
 
-    const key = generateRandomData({ type: keyType } as protobuf.Field);
-    let value;
+    const map: { [key: string]: any } = {};
 
-    if (field.resolvedType instanceof protobuf.Type) {
-      value = generateMockDataRecursive(field.resolvedType as protobuf.Type);
-    } else if (field.resolvedType instanceof protobuf.Enum) {
-      const values = Object.values(field.resolvedType.values);
-      value = values[faker.datatype.number({ min: 0, max: values.length - 1 })];
-    } else {
-      value = generateRandomData({ type: valueType } as protobuf.Field);
+    for (let i = 0; i < faker.datatype.number({ min: 1, max: maxRepeatedLength }); i++) {
+      const key = generateRandomData({ type: keyType } as protobuf.Field);
+      let value;
+
+      if (field.resolvedType instanceof protobuf.Type) {
+        value = generateMockDataRecursive(field.resolvedType as protobuf.Type);
+      } else if (field.resolvedType instanceof protobuf.Enum) {
+        const values = Object.values(field.resolvedType.values);
+        value = values[faker.datatype.number({ min: 0, max: values.length - 1 })];
+      } else {
+        value = generateRandomData({ type: valueType } as protobuf.Field);
+      }
+
+      map[key] = value;
     }
 
-    const map = { [key]: value };
     return map;
   }
+
 
   /**
  * Generates mock data for a given protobuf message type.

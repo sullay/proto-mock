@@ -1,6 +1,6 @@
 {
   "name": "proto-mock",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "根据proto文件定义，mock对应的json数据",
   "main": "index.js",
   "scripts": {
