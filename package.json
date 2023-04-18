@@ -1,6 +1,6 @@
 {
   "name": "proto-mock",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "根据proto文件定义，mock对应的json数据",
   "main": "index.js",
   "scripts": {
@@ -21,9 +21,11 @@
   },
   "homepage": "https://github.com/sullay/proto-mock#readme",
   "devDependencies": {
+    "@types/jest": "^29.5.0",
     "@types/node": "^18.15.11",
     "jest": "^29.5.0",
     "proto-mock": "^0.4.0",
+    "ts-jest": "^29.1.0",
     "ts-node": "^10.9.1"
   },
   "dependencies": {

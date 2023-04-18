@@ -1,5 +1,5 @@
-const path = require('path');
-const { generateMockData } = require('proto-mock');
+import * as path from 'path';
+import { generateMockData } from '../index';
 
 describe('generateMockData', () => {
   test('returns mocked data for Person message type', async () => {
