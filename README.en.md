@@ -1,18 +1,14 @@
+# proto-mock
 
-proto-mock
-==========
+`proto-mock` is a Node.js library that generates random data for given Protobuf message types.
 
-`proto-mock` is a Node.js library that generates random data for a given Protobuf message type.
-
-Installation
-------------
+## Installation
 
 ```bash
 npm install proto-mock
 ```
 
-Usage
------
+## Usage
 
 ```typescript
 import { generateMockData } from 'proto-mock';
@@ -25,19 +21,19 @@ console.log(mockData);
 
 *   `protoFilePath` - Required. The path to the Protobuf file.
 *   `messageType` - Required. The name of the message type.
-*   `options` - Optional. Settings for generating random data.
+*   `options` - Optional. The settings for generating random data.
 
-Returns a Promise that asynchronously returns the generated random data.
+Return value: A Promise that asynchronously returns the generated random data.
 
 ### `GenerateMockDataOptions`
 
-*   `maxRepeatedLength` - Optional. The maximum length of the generated arrays. Defaults to 3.
-*   `keepCase` - Optional. Whether to keep the case of field names. Defaults to false (camelCase).
+*   `maxRepeatedLength` - Optional. Specifies the maximum length of generated arrays. Defaults to 3.
+*   `maxMapEntries` - Optional. Specifies the maximum number of entries in generated maps. Defaults to 3.
+*   `keepCase` - Optional. Specifies whether to preserve the case of field names. Defaults to false (camel case).
 
-Example
--------
+## Example
 
-Assume there is a `person.proto` file that defines a `Person` message type:
+Suppose there is a `person.proto` file defining a `Person` message type:
 
 ```protobuf
 syntax = "proto3";
@@ -53,13 +49,12 @@ message Person {
 
 Using `proto-mock`, random data can be generated for the `Person` type:
 
-
 ```typescript
 import { generateMockData } from 'proto-mock';
 
 const mockData = await generateMockData('path/to/person.proto', 'Person');
 console.log(mockData);
-// Outputs random data similar to the following:
+// Outputs randomly generated data similar to:
 // {
 //   name: 'Lola Hudson',
 //   age: -12713,

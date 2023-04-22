@@ -14,6 +14,7 @@ export async function generateMockData(
   messageType: string,
   options: {
     maxRepeatedLength?: number;
+    maxMapEntries?: number;
     keepCase?: boolean;
   } = {}
 ): Promise<any> {
@@ -24,7 +25,7 @@ export async function generateMockData(
     throw new Error(`Failed to lookup type ${messageType} in ${protoFilePath}`);
   }
 
-  const { maxRepeatedLength = 3, keepCase = false } = options;
+  const { maxRepeatedLength = 3, maxMapEntries = 3, keepCase = false } = options;
 
   return generateMockDataRecursive(type);
 
@@ -64,7 +65,7 @@ export async function generateMockData(
 
     const map: { [key: string]: any } = {};
 
-    for (let i = 0; i < faker.datatype.number({ min: 1, max: maxRepeatedLength }); i++) {
+    for (let i = 0; i < faker.datatype.number({ min: 1, max: maxMapEntries }); i++) {
       const key = generateRandomData({ type: keyType } as protobuf.Field);
       let value;
 

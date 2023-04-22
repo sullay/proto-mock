@@ -11,7 +11,18 @@ describe('generateMockData', () => {
       name: expect.any(String),
       age: expect.any(Number),
       email: expect.any(Array),
+      emailAddress: expect.any(String),
+      phoneNumbers: expect.any(Object),
+      gender: expect.any(Number),
     });
+    // 验证map类型的key和value
+    Object.keys(mockData.phoneNumbers).forEach((key) => {
+      expect(Number.isInteger(parseInt(key, 10))).toBe(true);
+      expect(typeof mockData.phoneNumbers[key]).toBe('string');
+    });
+    // 验证枚举类型
+    expect(mockData.gender).toBeGreaterThanOrEqual(0);
+    expect(mockData.gender).toBeLessThanOrEqual(2);
   });
 
   test('returns mocked data with specified maxRepeatedLength', async () => {
@@ -34,7 +45,17 @@ describe('generateMockData', () => {
       age: expect.any(Number),
       email: expect.any(Array),
       email_address: expect.any(String),
+      phone_numbers: expect.any(Object),
+      gender: expect.any(Number),
     });
+    // 验证map类型的key和value
+    Object.keys(mockData.phone_numbers).forEach((key) => {
+      expect(Number.isInteger(parseInt(key, 10))).toBe(true);
+      expect(typeof mockData.phone_numbers[key]).toBe('string');
+    });
+    // 验证枚举类型
+    expect(mockData.gender).toBeGreaterThanOrEqual(0);
+    expect(mockData.gender).toBeLessThanOrEqual(2);
   });
 
   test('throws an error when invalid message type is provided', async () => {

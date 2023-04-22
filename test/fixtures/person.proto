@@ -2,9 +2,17 @@ syntax = "proto3";
 
 package example;
 
+enum Gender {
+  MALE = 0;
+  FEMALE = 1;
+  UNKNOWN = 2;
+}
+
 message Person {
   string name = 1;
   int32 age = 2;
   repeated string email = 3;
   string email_address = 4;
+  map<int32, string> phone_numbers = 5;
+  Gender gender = 6;
 }
