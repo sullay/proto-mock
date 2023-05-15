@@ -15,12 +15,12 @@ describe('generateMockData', () => {
       phoneNumbers: expect.any(Object),
       gender: expect.any(Number),
     });
-    // 验证map类型的key和value
+    // Validate map type key and value
     Object.keys(mockData.phoneNumbers).forEach((key) => {
       expect(Number.isInteger(parseInt(key, 10))).toBe(true);
       expect(typeof mockData.phoneNumbers[key]).toBe('string');
     });
-    // 验证枚举类型
+    // Validate enum type
     expect(mockData.gender).toBeGreaterThanOrEqual(0);
     expect(mockData.gender).toBeLessThanOrEqual(2);
   });
@@ -48,14 +48,27 @@ describe('generateMockData', () => {
       phone_numbers: expect.any(Object),
       gender: expect.any(Number),
     });
-    // 验证map类型的key和value
+    // Validate map type key and value
     Object.keys(mockData.phone_numbers).forEach((key) => {
       expect(Number.isInteger(parseInt(key, 10))).toBe(true);
       expect(typeof mockData.phone_numbers[key]).toBe('string');
     });
-    // 验证枚举类型
+    // Validate enum type
     expect(mockData.gender).toBeGreaterThanOrEqual(0);
     expect(mockData.gender).toBeLessThanOrEqual(2);
+  });
+
+  test('returns mocked data with specified keyValueRange', async () => {
+    const mockData = await generateMockData(
+      path.resolve(__dirname, './fixtures/person.proto'),
+      'Person',
+      { keyValueRange: { age: [20, 30], gender: [0, 1] } }
+    );
+    console.log(mockData)
+    expect(mockData.age).toBeGreaterThanOrEqual(20);
+    expect(mockData.age).toBeLessThanOrEqual(30);
+    expect(mockData.gender).toBeGreaterThanOrEqual(0);
+    expect(mockData.gender).toBeLessThanOrEqual(1);
   });
 
   test('throws an error when invalid message type is provided', async () => {
