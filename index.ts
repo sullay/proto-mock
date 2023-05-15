@@ -1,5 +1,5 @@
-import * as protobuf from 'protobufjs';
 import { faker } from '@faker-js/faker';
+import * as protobuf from 'protobufjs';
 import { convertToUnderscore, generateRandomData } from './utils';
 
 /**
@@ -26,7 +26,12 @@ export async function generateMockData(
     throw new Error(`Failed to lookup type ${messageType} in ${protoFilePath}`);
   }
 
-  const { maxRepeatedLength = 3, maxMapEntries = 3, keepCase = false, keyValueRange = {} } = options;
+  const {
+    maxRepeatedLength = 3,
+    maxMapEntries = 3,
+    keepCase = false,
+    keyValueRange = {},
+  } = options;
 
   return generateMockDataRecursive(type);
 
@@ -38,8 +43,9 @@ export async function generateMockData(
   function generateRepeatedMockData(field: protobuf.Field): any[] {
     const { resolvedType } = field;
     if (resolvedType instanceof protobuf.Type) {
-      return Array.from({ length: faker.datatype.number({ min: 1, max: maxRepeatedLength }) }, () =>
-        generateMockDataRecursive(resolvedType)
+      return Array.from(
+        { length: faker.datatype.number({ min: 1, max: maxRepeatedLength }) },
+        () => generateMockDataRecursive(resolvedType)
       );
     } else if (resolvedType instanceof protobuf.Enum) {
       return faker.helpers.arrayElements(
@@ -47,7 +53,10 @@ export async function generateMockData(
         faker.datatype.number({ min: 1, max: maxRepeatedLength })
       );
     } else {
-      return Array.from({ length: faker.datatype.number({ min: 1, max: maxRepeatedLength }) }, () => generateRandomData(field));
+      return Array.from(
+        { length: faker.datatype.number({ min: 1, max: maxRepeatedLength }) },
+        () => generateRandomData(field)
+      );
     }
   }
 
@@ -78,7 +87,6 @@ export async function generateMockData(
       } else {
         value = generateRandomData({ type: valueType } as protobuf.Field);
       }
-
       map[key] = value;
     }
 
@@ -88,7 +96,9 @@ export async function generateMockData(
   /**
   
   Generates mock data for a given protobuf message type.
+  
   @param type - The protobuf message type.
+  
   @returns The generated mock data.
   */
   function generateMockDataRecursive(type: protobuf.Type): any {
@@ -96,11 +106,14 @@ export async function generateMockData(
     // Loop through each field in the protobuf message
     for (const field of type.fieldsArray) {
       const fieldName = keepCase ? convertToUnderscore(field.name) : field.name;
-
+      // If keyValueRange is defined for the current field, generate data based on the specified range
       if (keyValueRange[field.name]) {
-        mockData[fieldName] = field.repeated ?
-          faker.helpers.arrayElements(keyValueRange[field.name], faker.datatype.number({ min: 1, max: maxRepeatedLength })) :
-          faker.helpers.arrayElement(keyValueRange[field.name]);
+        mockData[fieldName] = field.repeated
+          ? faker.helpers.arrayElements(
+            keyValueRange[field.name],
+            faker.datatype.number({ min: 1, max: maxRepeatedLength })
+          )
+          : faker.helpers.arrayElement(keyValueRange[field.name]);
       }
       // If the field is a map, generate a random key and value for it
       else if (field.map && field instanceof protobuf.MapField) {
@@ -112,7 +125,9 @@ export async function generateMockData(
       }
       // If the field is a nested message, recursively generate mock data for it
       else if (field.resolvedType instanceof protobuf.Type) {
-        const nestedMockData = generateMockDataRecursive(field.resolvedType as protobuf.Type);
+        const nestedMockData = generateMockDataRecursive(
+          field.resolvedType as protobuf.Type
+        );
         mockData[fieldName] = nestedMockData;
       }
       // If the field is an enum, generate a random value from its options
@@ -125,8 +140,6 @@ export async function generateMockData(
         mockData[fieldName] = generateRandomData(field);
       }
     }
-
     return mockData;
   }
 }
-

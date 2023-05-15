@@ -32,6 +32,7 @@ console.log(mockData);
 *   `maxRepeatedLength` - 可选参数，指定生成的数组的最大长度，默认为 3。
 *   `maxMapEntries` - 可选参数，指定生成的Map数据类型的最大长度，默认为 3。
 *   `keepCase` - 可选参数，指定是否保留字段名的大小写，默认为 false（驼峰命名）。
+*   `keyValueRange` - 可选参数，指定特定字段的取值范围，默认为 {}。
 
 ## 示例
 
@@ -62,4 +63,27 @@ console.log(mockData);
 //   age: -12713,
 //   email: [ 'calvinkoch@example.com', 'jakefernandez@example.com' ]
 // }
+```
+
+通过 keyValueRange 可以控制特定字段的取值范围，确保生成的随机数据符合预期。
+
+``` typescript
+import { generateMockData } from 'proto-mock';
+
+const options = {
+  keyValueRange: {
+    name: ['Alice', 'Bob'],
+    age: [18, 21, 30]
+  }
+};
+
+const mockData = await generateMockData('path/to/person.proto', 'Person', options);
+console.log(mockData);
+// 输出类似如下的随机数据：
+// {
+//   name: 'Alice',
+//   age: 21,
+//   email: [ 'calvinkoch@example.com', 'jakefernandez@example.com' ]
+// }
+
 ```

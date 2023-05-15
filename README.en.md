@@ -22,6 +22,7 @@ console.log(mockData);
 *   `protoFilePath` - Required. The path to the Protobuf file.
 *   `messageType` - Required. The name of the message type.
 *   `options` - Optional. The settings for generating random data.
+*   `keyValueRange` - Optional parameter that specifies the value range for specific fields. Default is {} (empty object).
 
 Return value: A Promise that asynchronously returns the generated random data.
 
@@ -61,3 +62,27 @@ console.log(mockData);
 //   email: [ 'calvinkoch@example.com', 'jakefernandez@example.com' ]
 // }
 ```
+
+By using keyValueRange, you can control the value range of specific fields to ensure that the generated random data meets your expectations.
+
+```typescript
+import { generateMockData } from 'proto-mock';
+
+const options = {
+  keyValueRange: {
+    name: ['Alice', 'Bob'],
+    age: [18, 21, 30]
+  }
+};
+
+const mockData = await generateMockData('path/to/person.proto', 'Person', options);
+console.log(mockData);
+// Outputs random data similar to the following:
+// {
+//   name: 'Alice',
+//   age: 21,
+//   email: [ 'calvinkoch@example.com', 'jakefernandez@example.com' ]
+// }
+
+```
+
